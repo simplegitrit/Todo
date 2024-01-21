@@ -8,9 +8,9 @@ const PORT = 3000;
 app.use(express.json());
 app.use(cors());
 
-app.post("/todo", async function(res,req){
+app.post("/todo", async function(req,res){
     const createPayload = req.body;
-    const parsedPayload = createTodo.safeParse(createTodo);
+    const parsedPayload = createTodo.safeParse(createPayload);
 
     if(!parsedPayload.success){
         res.status(411).json({
@@ -30,7 +30,7 @@ app.post("/todo", async function(res,req){
 
 })
 
-app.get("/todos", async function(res,req){
+app.get("/todos", async function(req,res){
     const todos = await todo.find({});
     
     res.json({
@@ -38,9 +38,9 @@ app.get("/todos", async function(res,req){
     })
 })
 
-app.put("/completed", async function(res,req){
+app.put("/completed", async function(req,res){
     const updatePayload = req.body;
-    const parsedPayload = UpdateTodo.safeParse(UpdateTodo);
+    const parsedPayload = UpdateTodo.safeParse(UpdatePayload);
 
     if(!parsedPayload.success){
         res.status(411).json({
@@ -49,7 +49,7 @@ app.put("/completed", async function(res,req){
         return;
     }
 
-    await todo.update({
+    await todo.findOneAndUpdate({
         _id: req.body.id
     },{
         completed: true
